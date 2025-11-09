@@ -1,7 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
 const endpoint =
-  import.meta.env.VITE_GRAPHQL_ENDPOINT ?? 'http://localhost:8787/graphql'
+  import.meta.env.VITE_GRAPHQL_ENDPOINT ?? 'https://chataiserver.shenweisheng126.workers.dev/graphql'
 
 const httpLink = new HttpLink({
   uri: endpoint,

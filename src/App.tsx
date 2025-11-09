@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client/react'
 import './App.css'
 import type { Message } from './types/chat'
 
+// 单一 GraphQL mutation，用于发送用户消息并获取最新对话
 const SEND_MESSAGE = gql`
   mutation SendMessage($input: ChatMessageInput!) {
     sendMessage(input: $input) {
@@ -34,6 +35,7 @@ type SendMessageVariables = {
   }
 }
 
+// 预置的气泡提示，便于快速体验
 const suggestions = [
   '简述整个 Cloudflare + GraphQL 架构的优势',
   '帮我写一段欢迎词，解释如何与 AI 协作',
@@ -41,6 +43,7 @@ const suggestions = [
 ] as const
 
 function App() {
+  // 聊天历史、输入框内容、错误提示等本地状态
   const [messages, setMessages] = useState<Message[]>([])
   const [currentMessage, setCurrentMessage] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -50,10 +53,12 @@ function App() {
     SendMessageVariables
   >(SEND_MESSAGE)
 
+  // 新消息渲染后自动滚动至底部
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
+  // 统一处理提交逻辑：乐观更新 + GraphQL 请求
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = currentMessage.trim()
@@ -95,10 +100,12 @@ function App() {
     }
   }
 
+  // 点击提示后直接填充输入框
   const handleSuggestion = (value: string) => {
     setCurrentMessage(value)
   }
 
+  // Enter 发送、Shift+Enter 换行
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
